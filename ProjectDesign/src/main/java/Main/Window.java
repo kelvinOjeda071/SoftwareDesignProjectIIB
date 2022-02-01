@@ -17,10 +17,10 @@ public class Window extends JFrame implements Runnable{
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private final int FPS = 60;
-	private double TARGETTIME = 1000000000/FPS;
-	private double delta = 0;
-	private int AVERAGEFPS = FPS;
+	private final int FPS = 60; //Fotogramas sobre los cuales queremos crear el uego
+	private double TARGETTIME = 1000000000/FPS; //Tiempo (nanosegundos) Requerido para pasar un fotograma
+	private double delta = 0; //Save temporate time 
+	private int AVERAGEFPS = FPS; //Fhotogram per second in the game
 	
 	public Window()
 	{
@@ -56,23 +56,16 @@ public class Window extends JFrame implements Runnable{
 
 	private void draw(){
 		bs = canvas.getBufferStrategy();
-		
-		if(bs == null)
-		{
-			canvas.createBufferStrategy(3);
+		if(bs == null){
+			canvas.createBufferStrategy(3); //3 Es el numero de buffers que usa un canvas
 			return;
 		}
-		
 		g = bs.getDrawGraphics();
-		
 		//-----------------------
-		
 		g.clearRect(0, 0, WIDTH, HEIGHT);
-		
 		g.setColor(Color.BLACK);
-		
-		g.drawString(""+AVERAGEFPS, 10, 20);
-		
+		g.drawString(""+AVERAGEFPS, 100, 100);
+//		g.drawRect(x, x, 100, 100);
 		//---------------------
 		g.dispose();
 		bs.show();
@@ -83,7 +76,7 @@ public class Window extends JFrame implements Runnable{
 	public void run() {
 		
 		long now = 0;
-		long lastTime = System.nanoTime();
+		long lastTime = System.nanoTime(); //La hora actual del sistema en nanosegundos
 		int frames = 0;
 		long time = 0;
 		
@@ -102,6 +95,7 @@ public class Window extends JFrame implements Runnable{
 				draw();
 				delta --;
 				frames ++;
+                                System.out.println(frames);
 			}
 			if(time >= 1000000000)
 			{
@@ -133,7 +127,5 @@ public class Window extends JFrame implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
-	
 	
 }
