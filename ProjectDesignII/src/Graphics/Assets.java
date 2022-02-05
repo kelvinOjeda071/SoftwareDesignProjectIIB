@@ -6,8 +6,7 @@ package Graphics;
 
 import java.awt.image.BufferedImage;
 
-/**
- *
+/*
  * @author KelvinOjeda
  */
 public class Assets {
