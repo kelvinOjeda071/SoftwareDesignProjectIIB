@@ -13,5 +13,6 @@ public class Assets {
     public static BufferedImage player;
     public static void init(){
         player = Loader.ImageLoader("\\Figure\\Player.png");
+        
     }
 }
