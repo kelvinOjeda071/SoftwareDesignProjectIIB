@@ -65,12 +65,14 @@ public class Window extends JFrame implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         gameState.draw(g);
+        
         //-------------------------------------------------------------
         g.dispose();
         bs.show();
     }
 
     private void init() {
+        Assets.init();
         gameState= new GameState();
     }
 
