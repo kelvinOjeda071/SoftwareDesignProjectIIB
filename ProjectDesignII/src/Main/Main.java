@@ -12,6 +12,7 @@ public class Main {
         System.out.println("Mensaje de prueba");
         System.out.println("Cambio 1");
         Assets.init();
+        
     }
     
 }
