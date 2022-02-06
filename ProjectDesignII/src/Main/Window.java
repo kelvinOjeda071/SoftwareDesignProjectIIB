@@ -1,6 +1,7 @@
 package Main;
 
 import Graphics.Assets;
+import Input.KeyBoard;
 import State.GameState;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -26,6 +27,7 @@ public class Window extends JFrame implements Runnable {
     private int AVERAGEFPS = FPS; //Average frame per second in the game
     
     private GameState gameState;
+    private KeyBoard keyBoard;
 
     public Window() {
         setTitle("Asteroid Game");
@@ -36,13 +38,17 @@ public class Window extends JFrame implements Runnable {
         setVisible(true);
 
         canvas = new Canvas();
+        keyBoard=new KeyBoard();
 
         canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
         canvas.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         canvas.setFocusable(true);
+        
 
         add(canvas);//Adding canvas in the current windows
+        canvas.addKeyListener(keyBoard);//Canvas to implement the key listener
+        
 
     }
 
@@ -51,6 +57,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     private void update() {
+        keyBoard.upadte();
         gameState.update();
     }
 
@@ -95,7 +102,7 @@ public class Window extends JFrame implements Runnable {
                 draw();
                 delta--;
                 frames++;
-                System.out.println(frames);
+                
             }
             if (time >= 1000000000) {
                 AVERAGEFPS = frames;
