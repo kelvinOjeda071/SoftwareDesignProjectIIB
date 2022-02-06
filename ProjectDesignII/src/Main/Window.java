@@ -1,6 +1,7 @@
 package Main;
 
 import Graphics.Assets;
+import State.GameState;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +24,8 @@ public class Window extends JFrame implements Runnable {
     private double TARGETTIME = 1000000000 / FPS; //Time in nanoseconds
     private double delta = 0; //Save temporate time 
     private int AVERAGEFPS = FPS; //Average frame per second in the game
+    
+    private GameState gameState;
 
     public Window() {
         setTitle("Asteroid Game");
@@ -48,7 +51,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     private void update() {
-
+        gameState.update();
     }
 
     private void draw() {
@@ -61,14 +64,14 @@ public class Window extends JFrame implements Runnable {
         //-----------Space to draw Figure into Windows-----------------
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(Assets.player, 100, 100, null);
+        gameState.draw(g);
         //-------------------------------------------------------------
         g.dispose();
         bs.show();
     }
 
     private void init() {
-        Assets.init();
+        gameState= new GameState();
     }
 
     @Override
