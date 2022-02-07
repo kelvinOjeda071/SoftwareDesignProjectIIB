@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
  *
  * @author KelvinOjeda
  */
-public class Player extends MovingObject{
+public class Player extends Object{
 
     private Vector2D heading;// The direction vector
     private Vector2D acceleration; // The variation of velocity with respect to time
