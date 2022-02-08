@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Graphics;
 
 import java.awt.image.BufferedImage;
@@ -14,10 +10,12 @@ import javax.imageio.ImageIO;
  * @author KelvinOjeda
  */
 public class Loader {
-    public static BufferedImage ImageLoader(String path){ //Permite cargar imagenes en memoria
+     //Is the form that java save image into cache
+    public static BufferedImage ImageLoader(String path){
         try {
         return ImageIO.read(Loader.class.getResource(path));
         } catch (IOException ex) {
+            // Return whatever error in the proccess to update the image
            ex.printStackTrace();
         }
         return null;
