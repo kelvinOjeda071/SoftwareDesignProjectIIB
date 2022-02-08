@@ -19,8 +19,9 @@ public class GameState {
     
     
     public GameState(){
-        player= new Player(new Vector2D(100,500), new Vector2D(), 5, 
-                Assets.player);
+
+        player= new Player(new Vector2D(100,500), new Vector2D(), 7.5, Assets.player);
+
     }
     
     public void update(){
