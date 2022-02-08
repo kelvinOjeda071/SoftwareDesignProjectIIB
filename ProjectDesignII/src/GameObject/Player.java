@@ -18,14 +18,17 @@ import java.awt.image.BufferedImage;
  * @author KelvinOjeda
  */
 public class Player extends Object{
-
-    private Vector2D heading;// The direction vector
-    private Vector2D acceleration; // The variation of velocity with respect to time
-    private final double ACC=0.2; // The scale of acceleration to gt the acceleraion vector
+    // The direction vector
+    private Vector2D heading;
+    //The variation of velocity with respect to time
+    private Vector2D acceleration; 
+    // The scale of acceleration to get the acceleration vector
+    private final double ACC=0.2; 
     private final double DELTAANGLE = 0.1;
     private boolean accelerating = false;
     
-    public Player(Vector2D position, Vector2D velocity, double maxVelocity, BufferedImage texture) {
+    public Player(Vector2D position, Vector2D velocity, 
+            double maxVelocity, BufferedImage texture) {
         super(position, velocity, maxVelocity, texture);
         heading= new Vector2D(0,1);
         acceleration = new Vector2D();
@@ -45,8 +48,7 @@ public class Player extends Object{
                 acceleration=(velocity.scale(-1).normalize()).scale(ACC/2);
                 accelerating=false;
             }
-        }
-        
+        }        
         velocity = velocity.add(acceleration); //Acceleration is the variation of the velocity
         
         velocity = velocity.limit(maxVelocity); //Limited the velocity vector
@@ -79,8 +81,8 @@ public class Player extends Object{
             g2d.drawImage(Assets.speed, at2, null);
         }
         at= AffineTransform.getTranslateInstance(position.getX(), position.getY());
-        at.rotate(angle,width/2, height/2); //Rotate around the center, that why we get the width and height /2
-        
+        //Rotate around the center, that why we get the width and height /2
+        at.rotate(angle,width/2, height/2); 
         g2d.drawImage(Assets.player, at, null );
     }
     
