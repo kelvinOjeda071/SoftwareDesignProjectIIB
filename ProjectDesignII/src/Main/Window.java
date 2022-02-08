@@ -47,7 +47,7 @@ public class Window extends JFrame implements Runnable {
         
 
         add(canvas);//Adding canvas in the current windows
-        canvas.addKeyListener(keyBoard);//Canvas to implement the key listener
+        canvas.addKeyListener(keyBoard);//Canvas implement the key listener
         
 
     }
@@ -64,7 +64,8 @@ public class Window extends JFrame implements Runnable {
     private void draw() {
         bs = canvas.getBufferStrategy();
         if (bs == null) {
-            canvas.createBufferStrategy(3); //3 Is the number of buffer that a canvas need
+            canvas.createBufferStrategy(3);//3 Is the number of buffer that 
+                                           //a canva need
             return;
         }
         g = bs.getDrawGraphics();

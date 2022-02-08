@@ -32,7 +32,7 @@ public class KeyBoard implements KeyListener{
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { //Whe the key is not pressed, is released
+    public void keyReleased(KeyEvent e) {//Whe the key is not pressed,is released
         keys[e.getKeyCode()]=false;
     }
     

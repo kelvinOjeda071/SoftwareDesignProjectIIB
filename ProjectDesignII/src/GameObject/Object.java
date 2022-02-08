@@ -17,10 +17,12 @@ public abstract class Object extends GameObject {
     
     protected Vector2D velocity;
     protected AffineTransform at;//Helping to rotating the ship
-    protected double angle; //All moving object has an angle to direct where the ship is going 
+    //All moving object has an angle to direct where the ship is going 
+    protected double angle; 
     protected double maxVelocity;
 
-    public Object(Vector2D position, Vector2D velocity, double maxVelocity,BufferedImage texture) {
+    public Object(Vector2D position, Vector2D velocity, 
+            double maxVelocity,BufferedImage texture) {
         super(position, texture);
         this.velocity=velocity;
         this.maxVelocity= maxVelocity;
