@@ -8,6 +8,6 @@ package GameObject;
  *
  * @author Jonathan Puglla
  */
-public class Laser {
+public class Laser extends Object{
     
 }
