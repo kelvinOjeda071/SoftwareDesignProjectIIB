@@ -4,7 +4,7 @@ package Main;
 import Graphics.Assets;
 
 /*
- * @author KelvinOjeda
+ * @author GR4
  */
 public class Main {
 

@@ -1,3 +1,8 @@
+<<<<<<< OURS
+/ProjectDesignII/nbproject/private/
+=======
 /ProjectDesign/target/
 /ProjectDesignII/nbproject/private/
 /ProjectDesignII/build/
+>>>>>>> THEIRS
+/ProjectDesignII/dist/
