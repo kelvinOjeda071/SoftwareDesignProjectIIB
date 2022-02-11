@@ -86,4 +86,14 @@ public class Player extends Object{
         g2d.drawImage(Assets.player, at, null );
     }
     
+    /* Obtains the center of the space ship */
+    public Vector2D getCenter(){
+        /* Local attributes */
+        double posX = position.getX() + width / 2;
+        double posY = position.getY() + height / 2;
+        
+        /* Returns the center */
+        return new Vector2D(posX, posY);
+    }
+    
 }
