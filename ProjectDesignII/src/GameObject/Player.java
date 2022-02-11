@@ -8,6 +8,7 @@ import Graphics.Assets;
 import Input.KeyBoard;
 import Main.Window;
 import Math.Vector2D;
+import State.GameState;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -27,15 +28,43 @@ public class Player extends Object{
     private final double DELTAANGLE = 0.1;
     private boolean accelerating = false;
     
+    /* Game State object */
+    private GameState gameState;
+    
+    /* Fixing FPS shooting */
+    private long time;
+    private long lastTime;
+    
     public Player(Vector2D position, Vector2D velocity, 
-            double maxVelocity, BufferedImage texture) {
+            double maxVelocity, BufferedImage texture,
+            GameState gameState) {
         super(position, velocity, maxVelocity, texture);
+        
+        this.gameState = gameState;
         heading= new Vector2D(0,1);
         acceleration = new Vector2D();
+        
+        /* Time and last Time fixing */
+        time = 0;
+        lastTime = System.currentTimeMillis();
     }
 
     @Override
     public void update() {
+        /* Time updates */
+        time += System.currentTimeMillis() - lastTime;
+        lastTime = System.currentTimeMillis();
+        
+        /* Shooting effect */
+        if(KeyBoard.SHOOT && time > 200){
+            gameState.getMovingObjects().add(0, new Laser(
+                    getCenter().add(heading.scale(width)), 
+                    heading, 10, angle, Assets.greenLaser));
+            
+            /* Sets time to 0 */
+            time = 0;
+        }
+        
         if(KeyBoard.RIGHT)
             angle += DELTAANGLE;
         if(KeyBoard.LEFT)
