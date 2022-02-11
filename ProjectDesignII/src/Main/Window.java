@@ -8,12 +8,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-
+import GameObjects.Constants;
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements Runnable {
-
-    public static final int WIDTH = 800, HEIGHT = 600;
+    /* Attributes */
     private Canvas canvas;
     private Thread thread;
     private boolean running = false;
@@ -30,8 +29,9 @@ public class Window extends JFrame implements Runnable {
     private KeyBoard keyBoard;
 
     public Window() {
-        setTitle("Asteroid Game");
-        setSize(WIDTH, HEIGHT);
+        /* Window attributes */
+        setTitle("Atari Asteroids");
+        setSize(Constants.WIDTH, Constants.HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -40,9 +40,9 @@ public class Window extends JFrame implements Runnable {
         canvas = new Canvas();
         keyBoard=new KeyBoard();
 
-        canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        canvas.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-        canvas.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        canvas.setPreferredSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
+        canvas.setMaximumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
+        canvas.setMinimumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
         canvas.setFocusable(true);
         
 
