@@ -56,6 +56,52 @@ public class GameState {
     
     /* Methods */
     
+    /* Increases the number of asteroids if destroyed */
+    public void divideAsteroid(Asteroid myAsteroid){
+        /* Gets the meteor enumerator size */
+        Size size = myAsteroid.getSize();
+        
+        /* Buffered image */
+        BufferedImage[] textures = size.textures;
+        
+        /* Sets the new meteor enumerator size */
+        Size newSize = null;
+        
+        /* Updates the asteroid size */
+        switch (size) {
+            case BIG:
+                newSize = Size.MED;
+                break;
+            case MED:
+                newSize = Size.SMALL;
+                break;
+            case SMALL:
+                newSize = Size.TINY;
+                break;
+            default:
+                return;
+        }
+        
+        /* Ateroids split iteration */
+        int i = 0;
+        
+        /* Calculates the angle*/
+        double myAngle = Math.random() * Math.PI * 2;
+            
+        for(i = 0; i < size.quantity; i++){
+            movingObjects.add(
+                    new Asteroid(
+                        myAsteroid.getPosition(),
+                        new Vector2D(0, 1).setDirection(myAngle),
+                        Constant.METEOR_VEL * Math.random() + 1,
+                        textures[(int) (Math.random() * textures.length)], 
+                        this, 
+                        newSize
+                    )
+            );
+        }
+    }
+    
     /* Deploys the asteroids */
     private void startWave(){
         /* Asteroid position */
