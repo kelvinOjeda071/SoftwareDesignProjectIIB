@@ -4,7 +4,7 @@
  */
 package GameObjects;
 
-import Graphics.Assets;
+import Graphics.Asset;
 import Input.KeyBoard;
 import Main.Window;
 import Math.Vector2D;
@@ -53,43 +53,42 @@ public class Player extends Object{
     public void update() {
         /* Shooting effect */
         if(KeyBoard.SHOOT &&  !fireRate.isRunning()){
-            gameState.getMovingObjects().add(
-                0, 
+            gameState.getMovingObjects().add(0, 
                 new Laser(
                     getCenter().add(heading.scale(width)), 
                     heading, 
-                    Constants.LASER_VEL, 
+                    Constant.LASER_VEL, 
                     angle,
-                    Assets.greenLaser, 
+                    Asset.greenLaser, 
                     gameState
                 )
             );
             
             /* Running */
-            fireRate.run(Constants.FIRERATE);
+            fireRate.run(Constant.FIRERATE);
         }
         
         /* Space ship moves to the RIGHT */
         if(KeyBoard.RIGHT){
-            angle += Constants.DELTAANGLE;
+            angle += Constant.DELTAANGLE;
         }
         
         /* Space ship moves to the LEFT */
         if(KeyBoard.LEFT) {
-            angle -= Constants.DELTAANGLE;
+            angle -= Constant.DELTAANGLE;
         }
         
         /* Space ship moves to the TOP */
         if(KeyBoard.UP){
             /* Moves the ship */
-            acceleration = heading.scale(Constants.ACC);
+            acceleration = heading.scale(Constant.ACC);
             accelerating = true;
             
         }else{
             if(velocity.getMagnitude() != 0){
                 acceleration = (
                     velocity.scale(-1).normalize()
-                ).scale(Constants.ACC/2);
+                ).scale(Constant.ACC/2);
                 
                 /* Ship is not moving */
                 accelerating = false;
@@ -105,30 +104,33 @@ public class Player extends Object{
         position = position.add(velocity);
         
         /* Sets the movement limit across the SCREEN DIMENSIONS */
-        if(position.getX() > Constants.WIDTH) {
+        if(position.getX() > Constant.WIDTH) {
             position.setX(0);
         }
             
-        if(position.getY() > Constants.HEIGHT) {
+        if(position.getY() > Constant.HEIGHT) {
             position.setY(0);
         }
             
         if(position.getX() < 0) {
-           position.setX(Constants.WIDTH); 
+           position.setX(Constant.WIDTH); 
         }
             
         if(position.getY() < 0) {
-            position.setY(Constants.HEIGHT);
+            position.setY(Constant.HEIGHT);
         }
         
         /* Updates the chronometer */
         fireRate.update();
+        
+        /* Detects a collition */
+        collidesWith();
     }
 
     @Override
     public void draw(Graphics g) {
+        /* Sets the graphics object */
         Graphics2D g2d= (Graphics2D)g;
-        
         
         /* Effects */
         AffineTransform at1 = AffineTransform.getTranslateInstance(
@@ -145,8 +147,8 @@ public class Player extends Object{
         at2.rotate(angle, width/2 -5, 0-10);
         
         if(accelerating == true){
-            g2d.drawImage(Assets.speed, at1, null);
-            g2d.drawImage(Assets.speed, at2, null);
+            g2d.drawImage(Asset.speed, at1, null);
+            g2d.drawImage(Asset.speed, at2, null);
         }
         
         at= AffineTransform.getTranslateInstance(
@@ -155,17 +157,7 @@ public class Player extends Object{
         
         /* Allows the center rotation of the ship */
         at.rotate(angle, width / 2, height / 2); 
-        g2d.drawImage(Assets.player, at, null );
-    }
-    
-    /* Obtains the center of the space ship */
-    public Vector2D getCenter(){
-        /* Local attributes */
-        double posX = position.getX() + width / 2;
-        double posY = position.getY() + height / 2;
-        
-        /* Returns the center */
-        return new Vector2D(posX, posY);
+        g2d.drawImage(texture, at, null );
     }
     
 }

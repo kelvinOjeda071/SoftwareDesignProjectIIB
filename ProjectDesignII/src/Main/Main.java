@@ -1,7 +1,7 @@
 
 package Main;
 
-import Graphics.Assets;
+import Graphics.Asset;
 
 /*
  * @author GR4
@@ -14,7 +14,7 @@ public class Main {
         System.out.println("Cambio 1");
         
         /* Assets */
-        Assets.init();
+        Asset.init();
     }
     
 }

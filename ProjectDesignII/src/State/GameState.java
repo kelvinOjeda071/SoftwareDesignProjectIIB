@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import GameObjects.Constant;
 import GameObjects.Size;
+import Graphics.Animation;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -25,6 +26,8 @@ public class GameState {
     private Player player;
     private ArrayList<Object> movingObjects = new ArrayList<Object>();
     private int meteors;
+    private ArrayList<Animation> explosions = new ArrayList<Animation>();
+    
     
     /* Constructor */
     public GameState(){
@@ -140,18 +143,46 @@ public class GameState {
         }
         
         /* Increases game difficulty */
-        meteors ++;
+        meteors ++; 
+    }
+    
+    /* Plays the explosion animation */
+    public void playExplosion(Vector2D position){
+        /* Subtraction vector */
+        Vector2D subVec = 
+                new Vector2D(
+                        Asset.explosions[0].getWidth() / 2,
+                        Asset.explosions[0].getHeight() / 2
+                );
         
+        explosions.add(
+            new Animation(Asset.explosions, 50, position.subtract(subVec))
+        );
     }
     
     /* Updates the object status */
     public void update(){
-        for(int i = 0; i < movingObjects.size(); i++) {
+        /* Index iteration attribute */
+        int i = 0;
+        
+        for(i = 0; i < movingObjects.size(); i++) {
             movingObjects.get(i).update();
         }
         
+        /* Updates the explosions animation */
+        for(i = 0; i < explosions.size(); i++){
+            Animation myAnimation = explosions.get(i);
+            myAnimation.update();
+            
+            /* Checks if animation is still running */
+            if(!myAnimation.isIsRunning()){
+                /* Deletes the animation */
+                explosions.remove(i);
+            }
+        }
+        
         /* Decides if a new wave is necessary */
-        for(int i = 0; i < movingObjects.size(); i++) {
+        for(i = 0; i < movingObjects.size(); i++) {
             if(movingObjects.get(i) instanceof Asteroid){
                return; 
             }
@@ -177,6 +208,19 @@ public class GameState {
 
         for(i = 0; i < movingObjects.size(); i++) {
             movingObjects.get(i).draw(g);
+        }
+        
+        /* Draws the animation */
+        /* Updates the explosions animation */
+        for(i = 0; i < explosions.size(); i++){
+            Animation myAnimation = explosions.get(i);
+            g2d.drawImage(
+                myAnimation.getCurrentFrame(), 
+                (int)myAnimation.getPosition().getX(), 
+                (int)myAnimation.getPosition().getY(),
+                null
+            );
+            
         }
     }
     

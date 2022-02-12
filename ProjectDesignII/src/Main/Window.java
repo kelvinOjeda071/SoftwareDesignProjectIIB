@@ -1,6 +1,6 @@
 package Main;
 
-import Graphics.Assets;
+import Graphics.Asset;
 import Input.KeyBoard;
 import State.GameState;
 import java.awt.Canvas;
@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import GameObjects.Constants;
+import GameObjects.Constant;
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements Runnable {
@@ -38,7 +38,7 @@ public class Window extends JFrame implements Runnable {
         setTitle("Atari Asteroids");
         
         /* Window attributes */
-        setSize(Constants.WIDTH, Constants.HEIGHT);
+        setSize(Constant.WIDTH, Constant.HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null); 
@@ -48,14 +48,11 @@ public class Window extends JFrame implements Runnable {
         keyBoard = new KeyBoard();
         
         /* Sets the window dimensions */
-        canvas.setPreferredSize(
-                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        canvas.setPreferredSize(new Dimension(Constant.WIDTH, Constant.HEIGHT)
         );
-        canvas.setMaximumSize(
-                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        canvas.setMaximumSize(new Dimension(Constant.WIDTH, Constant.HEIGHT)
         );
-        canvas.setMinimumSize(
-                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        canvas.setMinimumSize(new Dimension(Constant.WIDTH, Constant.HEIGHT)
         );
         
         canvas.setFocusable(true);
@@ -94,7 +91,7 @@ public class Window extends JFrame implements Runnable {
         
         /* Draws the window */
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
+        g.fillRect(0, 0, Constant.WIDTH, Constant.HEIGHT);
         gameState.draw(g);
         
         /* Shows the buffer */
@@ -103,7 +100,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     private void init() {
-        Assets.init();
+        Asset.init();
         gameState= new GameState();
     }
 
