@@ -21,79 +21,108 @@ import java.awt.image.BufferedImage;
 public class Player extends Object{
     /* Attributes */
     
-    // The direction vector
+    /* Direction vector */
     private Vector2D heading;
-    
-    //The variation of velocity with respect to time
+
+    /* Variation of acceleration */
     private Vector2D acceleration; 
-    
     private boolean accelerating = false;
     
-    /* Fixing FPS shooting */
-    private long time;
-    private long lastTime;
+    /* Delta Time fixing */
+    private Chronometer fireRate;
     
-    public Player(Vector2D position, Vector2D velocity, 
-            double maxVelocity, BufferedImage texture,
-            GameState gameState) {
+    /* Constructor */
+    public Player(
+        Vector2D position, 
+        Vector2D velocity, 
+        double maxVelocity, 
+        BufferedImage texture,
+        GameState gameState
+    ) {
+        /* Parent attributes */
         super(position, velocity, maxVelocity, texture, gameState);
         
+        /* Sets the object attributes */
+        fireRate = new Chronometer();
         heading= new Vector2D(0, 1);
         acceleration = new Vector2D();
-        
-        /* Time and last Time fixing */
-        time = 0;
-        lastTime = System.currentTimeMillis();
     }
-
+    
+    /* Methods */
     @Override
     public void update() {
-        /* Time updates */
-        time += System.currentTimeMillis() - lastTime;
-        lastTime = System.currentTimeMillis();
-        
         /* Shooting effect */
-        if(KeyBoard.SHOOT && time > Constants.FIRERATE){
-            gameState.getMovingObjects().add(0, new Laser(
+        if(KeyBoard.SHOOT &&  !fireRate.isRunning()){
+            gameState.getMovingObjects().add(
+                0, 
+                new Laser(
                     getCenter().add(heading.scale(width)), 
-                    heading, Constants.LASER_VEL, angle, Assets.greenLaser, 
-                    gameState));
+                    heading, 
+                    Constants.LASER_VEL, 
+                    angle,
+                    Assets.greenLaser, 
+                    gameState
+                )
+            );
             
-            /* Sets time to 0 */
-            time = 0;
+            /* Running */
+            fireRate.run(Constants.FIRERATE);
         }
         
-        if(KeyBoard.RIGHT)
+        /* Space ship moves to the RIGHT */
+        if(KeyBoard.RIGHT){
             angle += Constants.DELTAANGLE;
-        if(KeyBoard.LEFT)
+        }
+        
+        /* Space ship moves to the LEFT */
+        if(KeyBoard.LEFT) {
             angle -= Constants.DELTAANGLE;
+        }
+        
+        /* Space ship moves to the TOP */
         if(KeyBoard.UP){
-            acceleration=heading.scale(Constants.ACC);
-            accelerating=true;
-        }else{
-            if(velocity.getMagnitude()!=0){
-                acceleration=(velocity.scale(-1).normalize()).scale(
-                        Constants.ACC/2);
-                accelerating=false;
-            }
-        }        
-        velocity = velocity.add(acceleration); //Acceleration is the variation of the velocity
-        
-        velocity = velocity.limit(maxVelocity); //Limited the velocity vector
-        
-        heading=heading.setDirection(angle-Math.PI/2);
-        
-        position=position.add(velocity); //Velocity is the variation of the position
-        
-        if(position.getX() > Constants.WIDTH)
-            position.setX(0);
-        if(position.getY() > Constants.HEIGHT)
-            position.setY(0);
-        if(position.getX() < 0)
-            position.setX(Constants.WIDTH);
-        if(position.getY() < 0)
-            position.setY(Constants.HEIGHT);
+            /* Moves the ship */
+            acceleration = heading.scale(Constants.ACC);
+            accelerating = true;
             
+        }else{
+            if(velocity.getMagnitude() != 0){
+                acceleration = (
+                    velocity.scale(-1).normalize()
+                ).scale(Constants.ACC/2);
+                
+                /* Ship is not moving */
+                accelerating = false;
+            }
+        }
+        
+        /* Acceleration is the velocity variation */
+        velocity = velocity.add(acceleration); 
+        velocity = velocity.limit(maxVelocity);
+        heading = heading.setDirection(angle - Math.PI / 2);
+        
+        /* Velocity is the position variation */
+        position = position.add(velocity);
+        
+        /* Sets the movement limit across the SCREEN DIMENSIONS */
+        if(position.getX() > Constants.WIDTH) {
+            position.setX(0);
+        }
+            
+        if(position.getY() > Constants.HEIGHT) {
+            position.setY(0);
+        }
+            
+        if(position.getX() < 0) {
+           position.setX(Constants.WIDTH); 
+        }
+            
+        if(position.getY() < 0) {
+            position.setY(Constants.HEIGHT);
+        }
+        
+        /* Updates the chronometer */
+        fireRate.update();
     }
 
     @Override
@@ -103,23 +132,29 @@ public class Player extends Object{
         
         /* Effects */
         AffineTransform at1 = AffineTransform.getTranslateInstance(
-                position.getX()+width/2 + 5, position.getY()+height/2 +10);
+                position.getX() + width / 2 + 5,
+                position.getY() + height / 2 + 10
+        );
         
         AffineTransform at2 = AffineTransform.getTranslateInstance(
-                position.getX() +5, position.getY()+height/2 +10);
-        at1.rotate(angle,-5, -10);
+                position.getX() + 5, 
+                position.getY() + height / 2 + 10
+        );
+        
+        at1.rotate(angle, -5, -10);
         at2.rotate(angle, width/2 -5, 0-10);
         
-        if(accelerating==true){
+        if(accelerating == true){
             g2d.drawImage(Assets.speed, at1, null);
             g2d.drawImage(Assets.speed, at2, null);
         }
         
         at= AffineTransform.getTranslateInstance(
-                position.getX(), position.getY());
+            position.getX(), position.getY()
+        );
         
-        //Rotate around the center, that why we get the width and height /2
-        at.rotate(angle,width/2, height/2); 
+        /* Allows the center rotation of the ship */
+        at.rotate(angle, width / 2, height / 2); 
         g2d.drawImage(Assets.player, at, null );
     }
     

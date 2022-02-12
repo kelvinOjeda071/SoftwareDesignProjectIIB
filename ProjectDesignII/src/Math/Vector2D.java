@@ -26,27 +26,38 @@ public class Vector2D {
     }
     
     /* Methods */
+    
+    /* Calculates the vector magnitude */
     public double getMagnitude() {
         return Math.sqrt(x * x + y * y);
     }
-
+    
+    /* Gives the vector a direction */
     public Vector2D setDirection(double angle) {
         /* Attributes */
         double magnitude = getMagnitude();
         
+        /* Returns the new vector */
         return new Vector2D(
-                Math.cos(angle) * magnitude,
-                Math.sin(angle) * magnitude);
+            Math.cos(angle) * magnitude,
+            Math.sin(angle) * magnitude
+        );
     }
-
+    
+    /* Allows to add a new vector */
     public Vector2D add(Vector2D v) {
-        return new Vector2D(this.x + v.getX(), this.y + v.getY());
+        return new Vector2D(
+            this.x + v.getX(),
+            this.y + v.getY()
+        );
     }
-
+    
+    /* Resizes and scales the vector */
     public Vector2D scale(double value) { //Multiply by a scale
         return new Vector2D(this.x * value, this.y * value);
     }
-
+    
+    /* Limits the vector dimensions */
     public Vector2D limit(double value) {
         if(getMagnitude() > value){
             return this.normalize().scale(value);
@@ -59,7 +70,10 @@ public class Vector2D {
         /* Attributes */
         double magnitude = getMagnitude();
         
-        return new Vector2D(x / magnitude, y / magnitude);
+        return new Vector2D(
+            x / magnitude, 
+            y / magnitude
+        );
     }
     
     /* Get */

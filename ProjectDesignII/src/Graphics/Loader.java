@@ -10,14 +10,16 @@ import javax.imageio.ImageIO;
  * @author KelvinOjeda
  */
 public class Loader {
-     //Is the form that java save image into cache
+    /* Image is saved on Cache memory */
     public static BufferedImage ImageLoader(String path){
+        
         try {
-        return ImageIO.read(Loader.class.getResource(path));
+            return ImageIO.read(Loader.class.getResource(path));
         } catch (IOException ex) {
-            // Return whatever error in the proccess to update the image
+           /* Prints the stack trace error */
            ex.printStackTrace();
         }
+        
         return null;
     }
 }
