@@ -44,11 +44,19 @@ public class Vector2D {
         );
     }
     
-    /* Allows to add a new vector */
+    /* Addition operation between vectors */
     public Vector2D add(Vector2D v) {
         return new Vector2D(
             this.x + v.getX(),
             this.y + v.getY()
+        );
+    }
+    
+    /* Subtraction operation between vectors */
+    public Vector2D subtract(Vector2D v) {
+        return new Vector2D(
+            this.x - v.getX(),
+            this.y - v.getY()
         );
     }
     
