@@ -9,27 +9,34 @@ package Math;
  * @author KelvinOjeda
  */
 public class Vector2D {
-
-    private double x, y;
-
+    /* Attributes */
+    private double x;
+    private double y;
+    
+    /* Constructor */
     public Vector2D() {
         x = 0;
         y = 0;
     }
-
+    
+    /* Constructor with attributes */
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
     }
-
+    
+    /* Methods */
     public double getMagnitude() {
         return Math.sqrt(x * x + y * y);
     }
 
     public Vector2D setDirection(double angle) {
+        /* Attributes */
+        double magnitude = getMagnitude();
+        
         return new Vector2D(
-                Math.cos(angle) * getMagnitude(),
-                Math.sin(angle) * getMagnitude());
+                Math.cos(angle) * magnitude,
+                Math.sin(angle) * magnitude);
     }
 
     public Vector2D add(Vector2D v) {
@@ -47,24 +54,30 @@ public class Vector2D {
         return this;
     }
     
+    /* Normalizes the vector */
     public Vector2D normalize(){
-        return new Vector2D(x/getMagnitude(), y/getMagnitude());
+        /* Attributes */
+        double magnitude = getMagnitude();
+        
+        return new Vector2D(x / magnitude, y / magnitude);
     }
-
+    
+    /* Get */
     public double getX() {
         return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
     }
 
     public double getY() {
         return y;
     }
-
+    
+    /* Set */
     public void setY(double y) {
         this.y = y;
+    }
+    
+    public void setX(double x) {
+        this.x = x;
     }
 
 }
