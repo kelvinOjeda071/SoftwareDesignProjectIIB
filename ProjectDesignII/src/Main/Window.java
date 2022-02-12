@@ -16,65 +16,88 @@ public class Window extends JFrame implements Runnable {
     private Canvas canvas;
     private Thread thread;
     private boolean running = false;
-
     private BufferStrategy bs;
     private Graphics g;
-
-    private final int FPS = 60; //Frames in the game that we want to implement
-    private double TARGETTIME = 1000000000 / FPS; //Time in nanoseconds
-    private double delta = 0; //Save temporate time 
-    private int AVERAGEFPS = FPS; //Average frame per second in the game
     
+    /* Frames per second displayed on screen */
+    private final int FPS = 60;
+    private double TARGETTIME = 1000000000 / FPS;
+    private double delta = 0;
+    
+    /* Average FPS displayed */
+    private int AVERAGEFPS = FPS;
+    
+    /* Game status and keyboard object */
     private GameState gameState;
     private KeyBoard keyBoard;
 
     public Window() {
-        /* Window attributes */
+        /* Attributes */
+        
+        /* Window Title */
         setTitle("Atari Asteroids");
+        
+        /* Window attributes */
         setSize(Constants.WIDTH, Constants.HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setLocationRelativeTo(null);
-        setVisible(true);
-
+        setLocationRelativeTo(null); 
+        
+        /* Canvas and Keyboard objects */
         canvas = new Canvas();
-        keyBoard=new KeyBoard();
-
-        canvas.setPreferredSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
-        canvas.setMaximumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
-        canvas.setMinimumSize(new Dimension(Constants.WIDTH, Constants.HEIGHT));
+        keyBoard = new KeyBoard();
+        
+        /* Sets the window dimensions */
+        canvas.setPreferredSize(
+                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        );
+        canvas.setMaximumSize(
+                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        );
+        canvas.setMinimumSize(
+                new Dimension(Constants.WIDTH, Constants.HEIGHT)
+        );
+        
         canvas.setFocusable(true);
         
-
-        add(canvas);//Adding canvas in the current windows
-        canvas.addKeyListener(keyBoard);//Canvas implement the key listener
+        /* Adds the canvas to the current window */
+        add(canvas);
         
-
+        /* IO events */
+        canvas.addKeyListener(keyBoard);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
+        /* Creates the window type object */
         new Window().start();
     }
-
+    
+    /* Methods */
     private void update() {
         keyBoard.update();
         gameState.update();
     }
 
     private void draw() {
+        /* Sets the buffer */
         bs = canvas.getBufferStrategy();
+        
         if (bs == null) {
-            canvas.createBufferStrategy(3);//3 Is the number of buffer that 
-                                           //a canva need
+            /* The canva need 3 buffers */
+            canvas.createBufferStrategy(3);
+            
             return;
         }
+        
         g = bs.getDrawGraphics();
-        //-----------Space to draw Figure into Windows-----------------
+        
+        /* Draws the window */
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.fillRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
         gameState.draw(g);
         
-        //-------------------------------------------------------------
+        /* Shows the buffer */
         g.dispose();
         bs.show();
     }
@@ -86,18 +109,22 @@ public class Window extends JFrame implements Runnable {
 
     @Override
     public void run() {
-
+        /* Attributes */
         long now = 0;
-        long lastTime = System.nanoTime(); //Getting the time in nanoseconds
+        
+        /* Time and frames */
+        long lastTime = System.nanoTime();
         int frames = 0;
         long time = 0;
         init();
+        
+        /* While program is not closed */
         while (running) {
             now = System.nanoTime();
             delta += (now - lastTime) / TARGETTIME;
             time += (now - lastTime);
             lastTime = now;
-
+                
             if (delta >= 1) {
                 update();
                 draw();
@@ -113,22 +140,26 @@ public class Window extends JFrame implements Runnable {
             }
 
         }
-
+        
+        /* Stops the proccess */
         stop();
     }
-
+    
+    /* Starts the proccess */
     private void start() {
         thread = new Thread(this);
         thread.start();
         running = true;
 
     }
-
+    
+    /* Stops the current proccess */
     private void stop() {
         try {
             thread.join();
             running = false;
         } catch (InterruptedException e) {
+            /* Prints the error */
             e.printStackTrace();
         }
     }
