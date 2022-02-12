@@ -9,6 +9,7 @@ import State.GameState;
 import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  *
@@ -48,6 +49,64 @@ public abstract class Object extends GameObject {
     }
     
     /* Methods */
+    /* Obtains the center of the desired game object */
+    protected Vector2D getCenter(){
+        /* Local attributes */
+        double posX = position.getX() + width / 2;
+        double posY = position.getY() + height / 2;
+        
+        /* Returns the center */
+        return new Vector2D(posX, posY);
+    }
+    
+    /* Colliding method */
+    protected void collidesWith(){
+        /* Attributes */
+        ArrayList<Object> movingObjects = gameState.getMovingObjects();
+        double distance;
+        
+        /* Index pointer */
+        int i = 0;
+        
+        for(i = 0; i < movingObjects.size(); i++){
+            Object myGameObject = movingObjects.get(i);
+            
+            /* A game object cannot collide itself */
+            if(myGameObject.equals(this)){
+                continue;
+            }
+            
+            /* Calculates the distance between the object */
+            distance = 
+                myGameObject.
+                getCenter().
+                subtract(getCenter()).
+                getMagnitude();
+            
+            /* Condition statement so objects can collide */
+            if(
+                distance < myGameObject.width / 2 +  width / 2
+                    && movingObjects.contains(this)
+            ) {
+                objectCollition(myGameObject, this);
+            }
+        }
+    }
+    
+    /* Destroys both of the asteroids */
+    private void objectCollition(Object firstO, Object secondO){
+        if(!(firstO instanceof Asteroid && secondO instanceof Asteroid)){
+            /* Plays the explosion animation */
+            gameState.playExplosion(getCenter());
+            
+            firstO.Destroy();
+            secondO.Destroy();
+        }
+    }
+    /* Removes the game object if this collides */
+    protected void Destroy(){
+        gameState.getMovingObjects().remove(this);
+    }
     
     /* Update method */
     @Override
