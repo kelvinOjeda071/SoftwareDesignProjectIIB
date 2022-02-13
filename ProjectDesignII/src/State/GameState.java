@@ -13,6 +13,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import GameObjects.Constant;
 import GameObjects.Size;
+import GameObjects.Ufo;
 import Graphics.Animation;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -118,7 +119,7 @@ public class GameState {
         /* Starts the wave*/
         for(i = 0; i < asteroid; i++){
             x = i % 2 == 0 ? Math.random() * Constant.WIDTH : 0;
-            y = i % 2 == 0 ? 0 : Math.random() * Constant.WIDTH;
+            y = i % 2 == 0 ? 0 : Math.random() * Constant.HEIGHT;
             
             /* Texture */
             BufferedImage texture = 
@@ -144,20 +145,48 @@ public class GameState {
         
         /* Increases game difficulty */
         asteroid ++; 
+        spawnUfo();
     }
     
     /* Plays the explosion animation */
     public void playExplosion(Vector2D position){
-        /* Subtraction vector */
-        Vector2D subVec = 
-                new Vector2D(
-                        Asset.explosions[0].getWidth() / 2,
-                        Asset.explosions[0].getHeight() / 2
-                );
         
         explosions.add(
-            new Animation(Asset.explosions, 50, position.subtract(subVec))
+            new Animation(Asset.explosions, 50, position.subtract(new Vector2D(
+                          Asset.explosions[0].getWidth()/2, 
+                          Asset.explosions[0].getHeight()/2)))
         );
+    }
+    
+    
+    private void spawnUfo(){
+        int rand = (int) (Math.random()*2);
+        double x = rand % 2 == 0 ? Math.random() * Constant.WIDTH : 0;
+        double y = rand % 2 == 0 ? 0 : Math.random() * Constant.HEIGHT;
+        ArrayList<Vector2D> path= new ArrayList<Vector2D>();
+            double posX, posY;
+            /*Top Left*/
+            posX= Math.random()*(Constant.WIDTH/2);
+            posY= Math.random()*Constant.HEIGHT/2;
+            path.add(new Vector2D(posX, posY));
+            /*Top right*/
+            posX= Math.random()*(Constant.WIDTH/2)+Constant.WIDTH/2;
+            posY= Math.random()*Constant.HEIGHT/2;
+            path.add(new Vector2D(posX, posY));
+            /*Lower left*/
+            posX= Math.random()*(Constant.WIDTH/2);
+            posY= Math.random()*(Constant.HEIGHT/2)+Constant.HEIGHT/2;
+            path.add(new Vector2D(posX, posY));
+            /*Lower right*/
+            posX= Math.random()*(Constant.WIDTH/2)+Constant.WIDTH/2;
+            posY= Math.random()*(Constant.HEIGHT/2)+Constant.HEIGHT/2;
+            path.add(new Vector2D(posX, posY));
+            
+            movingObjects.add(new Ufo(new Vector2D(x,y), 
+                    new Vector2D(), 
+                    Constant.UFO_MAX_VEL, 
+                    Asset.ufo, 
+                    path, this));
     }
     
     /* Updates the object status */
@@ -229,6 +258,11 @@ public class GameState {
     /* Array List access */
     public ArrayList<MovingObject> getMovingObjects() {
         return movingObjects;
+    }
+    
+    /* For getting the position of the player in Ufo*/
+    public Player getPlayer(){
+        return player;
     }
     
 }

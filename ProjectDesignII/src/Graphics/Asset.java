@@ -24,6 +24,8 @@ public class Asset {
     
     /* Explosion */
     public static BufferedImage[] explosions = new BufferedImage[9];
+    /* Ufo */
+    public static BufferedImage ufo;
     
     public static void init(){
         /* Ship texture */
@@ -36,7 +38,9 @@ public class Asset {
         greenLaser = Loader.ImageLoader("/Figure/Effects/laserGreen.png");
         
         /* Loads the meteors using a for bucle */
-        int x = 0;
+        int x;
+        
+        
         
         /* Big asteroids */
         for (x = 0; x < bigs.length; x++){
@@ -72,6 +76,8 @@ public class Asset {
                 "/Figure/Explosion/explosion" + x + ".png"
             );
         }
+        /*UFO*/
+        ufo = Loader.ImageLoader("/Figure/Ships/ufo.png");
         
     }
 }

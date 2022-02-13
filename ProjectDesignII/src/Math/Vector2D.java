@@ -43,6 +43,10 @@ public class Vector2D {
             Math.sin(angle) * magnitude
         );
     }
+    /* Give the angle */
+    public double getAngle(){
+        return Math.asin(y/getMagnitude());
+    }
     
     /* Addition operation between vectors */
     public Vector2D add(Vector2D v) {
