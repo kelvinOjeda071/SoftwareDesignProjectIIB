@@ -25,5 +25,5 @@ public class Constant {
     public static final double LASER_VEL = 15.0;
     
     /* Asteroid properties */
-    public static final double METEOR_VEL = 2.0;
+    public static final double ASTEROID_VEL = 2.0;
 }

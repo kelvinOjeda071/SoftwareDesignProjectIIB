@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Jonathan Puglla
  */
-public class Laser extends Object {
+public class Laser extends MovingObject {
 
     /* Constructor */
     public Laser(

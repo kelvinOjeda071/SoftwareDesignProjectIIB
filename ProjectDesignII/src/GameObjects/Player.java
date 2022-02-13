@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage;
  *
  * @author KelvinOjeda
  */
-public class Player extends Object{
+public class Player extends MovingObject{
     /* Attributes */
     
     /* Direction vector */

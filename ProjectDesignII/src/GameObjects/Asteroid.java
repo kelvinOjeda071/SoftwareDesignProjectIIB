@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Jonathan Puglla
  */
-public class Asteroid extends Object{
+public class Asteroid extends MovingObject{
     /* Attributes */
     private Size size;
     

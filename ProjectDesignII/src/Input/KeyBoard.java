@@ -19,8 +19,8 @@ public class KeyBoard implements KeyListener{
     
     /* Keyboard constructor */
     public KeyBoard(){
-        UP=LEFT=RIGHT=false;
-        SHOOT = false;
+        UP=LEFT=RIGHT=SHOOT=false;
+        
     }
     
     /* Methods */

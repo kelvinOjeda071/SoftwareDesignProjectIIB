@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author KelvinOjeda
  */
 
-public abstract class Object extends GameObject {
+public abstract class MovingObject extends GameObject {
     /* Attributes */
     
     /* Velocity is set as a 2D Vector */
@@ -35,7 +35,7 @@ public abstract class Object extends GameObject {
     protected GameState gameState;
     
     /* Constructor */
-    public Object(Vector2D position, Vector2D velocity, 
+    public MovingObject(Vector2D position, Vector2D velocity, 
             double maxVelocity,BufferedImage texture, 
             GameState gameState) {
         super(position, texture);
@@ -62,14 +62,14 @@ public abstract class Object extends GameObject {
     /* Colliding method */
     protected void collidesWith(){
         /* Attributes */
-        ArrayList<Object> movingObjects = gameState.getMovingObjects();
+        ArrayList<MovingObject> movingObjects = gameState.getMovingObjects();
         double distance;
         
         /* Index pointer */
         int i = 0;
         
         for(i = 0; i < movingObjects.size(); i++){
-            Object myGameObject = movingObjects.get(i);
+            MovingObject myGameObject = movingObjects.get(i);
             
             /* A game object cannot collide itself */
             if(myGameObject.equals(this)){
@@ -94,7 +94,7 @@ public abstract class Object extends GameObject {
     }
     
     /* Destroys both of the asteroids */
-    private void objectCollition(Object firstO, Object secondO){
+    private void objectCollition(MovingObject firstO, MovingObject secondO){
         if(!(firstO instanceof Asteroid && secondO instanceof Asteroid)){
             /* Plays the explosion animation */
             gameState.playExplosion(getCenter());

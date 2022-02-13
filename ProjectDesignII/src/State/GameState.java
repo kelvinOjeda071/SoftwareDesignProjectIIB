@@ -5,7 +5,7 @@
 package State;
 
 import GameObjects.Asteroid;
-import GameObjects.Object;
+import GameObjects.MovingObject;
 import GameObjects.Player;
 import Graphics.Asset;
 import Math.Vector2D;
@@ -24,8 +24,8 @@ import java.awt.image.BufferedImage;
 public class GameState {
     /* Attributes */
     private Player player;
-    private ArrayList<Object> movingObjects = new ArrayList<Object>();
-    private int meteors;
+    private ArrayList<MovingObject> movingObjects = new ArrayList<MovingObject>();
+    private int asteroid;
     private ArrayList<Animation> explosions = new ArrayList<Animation>();
     
     
@@ -51,7 +51,7 @@ public class GameState {
         movingObjects.add(player);
         
         /* Meteors quantity */
-        meteors = 1;
+        asteroid = 1;
         
         /* Starts the asteroids wave */
         startWave();
@@ -96,7 +96,7 @@ public class GameState {
                     new Asteroid(
                         myAsteroid.getPosition(),
                         new Vector2D(0, 1).setDirection(myAngle),
-                        Constant.METEOR_VEL * Math.random() + 1,
+                        Constant.ASTEROID_VEL * Math.random() + 1,
                         textures[(int) (Math.random() * textures.length)], 
                         this, 
                         newSize
@@ -116,7 +116,7 @@ public class GameState {
         int i = 0;
         
         /* Starts the wave*/
-        for(i = 0; i < meteors; i++){
+        for(i = 0; i < asteroid; i++){
             x = i % 2 == 0 ? Math.random() * Constant.WIDTH : 0;
             y = i % 2 == 0 ? 0 : Math.random() * Constant.WIDTH;
             
@@ -134,7 +134,7 @@ public class GameState {
                     new Asteroid(
                         new Vector2D(x, y),
                         new Vector2D(0, 1).setDirection(myAngle),
-                        Constant.METEOR_VEL * Math.random() + 1,
+                        Constant.ASTEROID_VEL * Math.random() + 1,
                         texture, 
                         this, 
                         Size.BIG
@@ -143,7 +143,7 @@ public class GameState {
         }
         
         /* Increases game difficulty */
-        meteors ++; 
+        asteroid ++; 
     }
     
     /* Plays the explosion animation */
@@ -227,7 +227,7 @@ public class GameState {
     /* Get */
     
     /* Array List access */
-    public ArrayList<Object> getMovingObjects() {
+    public ArrayList<MovingObject> getMovingObjects() {
         return movingObjects;
     }
     
