@@ -27,6 +27,12 @@ public class Asset {
     /* Ufo */
     public static BufferedImage ufo;
     
+    /* Number */
+    public static BufferedImage[] numbers = new BufferedImage[11];
+    
+    /* Life */
+    public static BufferedImage life;
+    
     public static void init(){
         /* Ship texture */
         player = Loader.ImageLoader("/Figure/Ships/player.png");
@@ -36,6 +42,12 @@ public class Asset {
         
         /* Laser texture */
         greenLaser = Loader.ImageLoader("/Figure/Effects/laserGreen.png");
+        
+        /* UFO texture */
+        ufo = Loader.ImageLoader("/Figure/Ships/ufo.png");
+        
+        /*Life texture*/
+        life = Loader.ImageLoader("/Figure/Life/life.png");
         
         /* Loads the meteors using a for bucle */
         int x;
@@ -76,8 +88,12 @@ public class Asset {
                 "/Figure/Explosion/explosion" + x + ".png"
             );
         }
-        /*UFO*/
-        ufo = Loader.ImageLoader("/Figure/Ships/ufo.png");
+        for (x = 0; x < numbers.length; x++) {
+            numbers[x]= Loader.ImageLoader(
+                    "/Figure/Numbers/" + x + ".png"
+            ); 
+        }
+
         
     }
 }

@@ -13,7 +13,7 @@ public class Constant {
     /* Static Attributes */
 
  /* Dimensions */
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 1000;
     public static final int HEIGHT = 600;
 
     /* Game properties */
@@ -27,13 +27,18 @@ public class Constant {
 
     /* Asteroid properties */
     public static final double ASTEROID_VEL = 2.0;
+    public static final int ASTEROID_SCORE = 20;
 
     /*Ufo properties*/
     public static final int NODE_RADIUS = 160;
-
-    public static final double UFO_MASS = 60;
-
-    public static final int UFO_MAX_VEL = 3;
-
-    public static long UFO_FIRE_RATE = 1000;
+	
+	public static final double UFO_MASS = 60;
+	
+	public static final int UFO_MAX_VEL = 3;
+	
+	public static long UFO_FIRE_RATE = 1000;
+	
+	public static double UFO_ANGLE_RANGE = Math.PI / 2;
+	
+	public static final int UFO_SCORE = 40;
 }

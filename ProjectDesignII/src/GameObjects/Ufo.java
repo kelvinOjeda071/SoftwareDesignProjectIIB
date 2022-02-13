@@ -87,10 +87,12 @@ public class Ufo extends MovingObject {
                     subtract(getCenter());
             toPlayer=toPlayer.normalize();
             double currentAngle = toPlayer.getAngle();
-            double newAngle=Math.random()*(Math.PI)-Math.PI/2+currentAngle;
-            toPlayer = toPlayer.setDirection(newAngle);
+            currentAngle+=Math.random()*Constant.UFO_ANGLE_RANGE-Constant.UFO_ANGLE_RANGE/2;
+           if(toPlayer.getX()<0)
+               currentAngle = -currentAngle+Math.PI;
+            toPlayer = toPlayer.setDirection(currentAngle);
             Laser laser = new Laser(getCenter().add(toPlayer.scale(width)),
-                    toPlayer, Constant.LASER_VEL, newAngle+Math.PI/2, 
+                    toPlayer, Constant.LASER_VEL, currentAngle+Math.PI/2, 
                     Asset.greenLaser, gameState);    
             gameState.getMovingObjects().add(0, laser);
             fireRate.run(Constant.UFO_FIRE_RATE);
@@ -102,6 +104,13 @@ public class Ufo extends MovingObject {
         fireRate.update();
         
     }
+    @Override
+    public void Destroy(){
+        gameState.addScore(Constant.UFO_SCORE);
+        super.Destroy();
+    }
+    
+    
     @Override
     public void draw(Graphics g) {
        Graphics2D g2d= (Graphics2D) g;
