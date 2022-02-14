@@ -11,20 +11,20 @@ import java.awt.image.BufferedImage;
  *
  * @author Jonathan Puglla
  */
-public enum Size {
-    /* Meteors destruction */
+public enum Size{
+    /* Asteroid destruction */
     BIG(2, Asset.meds), 
     MED(2, Asset.smalls), 
     SMALL(2, Asset.tinies), 
     TINY(0, null);
     
-    /* Meteors quantity after their destruction */
+    /* Asteroid quantity after their destruction */
     public int quantity;
     
     /* Buffered object */
     public BufferedImage[] textures;
     
-    /* Inits the meteors */
+    /* Inits the asteroid */
     private Size(int quantity, BufferedImage[] textures){
         this.quantity = quantity;
         this.textures = textures;

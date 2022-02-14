@@ -80,7 +80,7 @@ public class Ufo extends MovingObject {
         
         if(position.getX()>Constant.WIDTH || position.getY()> Constant.HEIGHT
                 || position.getX()<0 || position.getY()<0)
-            Destroy();
+            destroy();
         /* Shoot */
         if(!fireRate.isRunning()){
             Vector2D toPlayer=gameState.getPlayer().getCenter().
@@ -105,9 +105,9 @@ public class Ufo extends MovingObject {
         
     }
     @Override
-    public void Destroy(){
+    public void destroy(){
         gameState.addScore(Constant.UFO_SCORE, position);
-        super.Destroy();
+        super.destroy();
     }
     
     

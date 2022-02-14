@@ -107,12 +107,12 @@ public abstract class MovingObject extends GameObject {
             /* Plays the explosion animation */
             gameState.playExplosion(getCenter());
             
-            firstO.Destroy();
-            secondO.Destroy();
+            firstO.destroy();
+            secondO.destroy();
         }
     }
     /* Removes the game object if this collides */
-    protected void Destroy(){
+    protected void destroy(){
         gameState.getMovingObjects().remove(this);
     }
     

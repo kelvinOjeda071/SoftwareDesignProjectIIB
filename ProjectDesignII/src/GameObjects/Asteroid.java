@@ -68,10 +68,10 @@ public class Asteroid extends MovingObject{
     
     /* Destroys the asteroid */
     @Override
-    public void Destroy(){
+    public void destroy(){
         gameState.divideAsteroid(this);
         gameState.addScore(Constant.ASTEROID_SCORE, position);
-        super.Destroy();
+        super.destroy();
     }
     
     /* Draws the asteroid */

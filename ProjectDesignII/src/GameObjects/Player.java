@@ -153,7 +153,7 @@ public class Player extends MovingObject{
     
     /*Cuando se destruya reaparezca pero titilando*/
     @Override
-    public void Destroy() {
+    public void destroy() {
         //ship starts flashing
 	spawning = true;
 	spawnTime.run(Constant.SPAWNING_TIME);

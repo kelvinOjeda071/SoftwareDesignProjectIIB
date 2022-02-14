@@ -59,7 +59,7 @@ public class Laser extends MovingObject {
                 || position.getY() > Constant.HEIGHT) {
             
             /* Removes the laser */
-            Destroy();
+            destroy();
         }
 
         /* Detects a collition */
