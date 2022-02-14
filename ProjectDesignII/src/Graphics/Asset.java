@@ -1,5 +1,6 @@
 package Graphics;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 /*
@@ -33,6 +34,12 @@ public class Asset {
     /* Life */
     public static BufferedImage life;
     
+    // fonts
+	public static Font fontBig;
+	public static Font fontMed;
+    //button
+      public static BufferedImage blueBtn;
+	public static BufferedImage greyBtn;
     public static void init(){
         /* Ship texture */
         player = Loader.ImageLoader("/Figure/Ships/player.png");
@@ -48,6 +55,12 @@ public class Asset {
         
         /*Life texture*/
         life = Loader.ImageLoader("/Figure/Life/life.png");
+        
+        //fond texture
+        
+        fontBig = Loader.loadFont("/Figure/Fonts/futureFont.ttf", 42);	
+	fontMed = Loader.loadFont("/Figure/Fonts/futureFont.ttf", 20);
+        
         
         /* Loads the meteors using a for bucle */
         int x;
@@ -93,7 +106,8 @@ public class Asset {
                     "/Figure/Numbers/" + x + ".png"
             ); 
         }
-
+        greyBtn = Loader.ImageLoader("/Figure/Button/blue_button.png");
+	blueBtn = Loader.ImageLoader("/Figure/Button/grey_button.png");
         
     }
 }

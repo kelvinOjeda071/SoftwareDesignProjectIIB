@@ -95,6 +95,14 @@ public abstract class MovingObject extends GameObject {
     
     /* Destroys both of the asteroids */
     private void objectCollition(MovingObject firstO, MovingObject secondO){
+        //Check if the ship is blinking 
+        if(firstO instanceof Player && ((Player)firstO).isSpawning()) {
+			return;
+		}
+		if(secondO instanceof Player && ((Player)secondO).isSpawning()) {
+			return;
+		}
+                
         if(!(firstO instanceof Asteroid && secondO instanceof Asteroid)){
             /* Plays the explosion animation */
             gameState.playExplosion(getCenter());

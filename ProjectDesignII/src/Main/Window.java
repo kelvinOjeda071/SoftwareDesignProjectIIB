@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import GameObjects.Constant;
+import Input.MouseInput;
+import State.State;
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements Runnable {
@@ -27,9 +29,12 @@ public class Window extends JFrame implements Runnable {
     /* Average FPS displayed */
     private int AVERAGEFPS = FPS;
     
-    /* Game status and keyboard object */
-    private GameState gameState;
+    /*keyboard object */
+   
     private KeyBoard keyBoard;
+    
+    /*mouse object */
+   private MouseInput mouseInput;
 
     public Window() {
         /* Attributes */
@@ -46,7 +51,7 @@ public class Window extends JFrame implements Runnable {
         /* Canvas and Keyboard objects */
         canvas = new Canvas();
         keyBoard = new KeyBoard();
-        
+        mouseInput = new MouseInput();
         /* Sets the window dimensions */
         canvas.setPreferredSize(new Dimension(Constant.WIDTH, Constant.HEIGHT)
         );
@@ -62,6 +67,8 @@ public class Window extends JFrame implements Runnable {
         
         /* IO events */
         canvas.addKeyListener(keyBoard);
+        canvas.addMouseListener(mouseInput);
+        canvas.addMouseMotionListener(mouseInput);
         setVisible(true);
     }
 
@@ -73,7 +80,7 @@ public class Window extends JFrame implements Runnable {
     /* Methods */
     private void update() {
         keyBoard.update();
-        gameState.update();
+        State.getCurrentState().update();
     }
 
     private void draw() {
@@ -92,7 +99,7 @@ public class Window extends JFrame implements Runnable {
         /* Draws the window */
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Constant.WIDTH, Constant.HEIGHT);
-        gameState.draw(g);
+        State.getCurrentState().draw(g);
         
         /* Shows the buffer */
         g.dispose();
@@ -101,7 +108,7 @@ public class Window extends JFrame implements Runnable {
 
     private void init() {
         Asset.init();
-        gameState= new GameState();
+        State.changeState(new MenuState());
     }
 
     @Override

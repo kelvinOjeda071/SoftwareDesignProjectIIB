@@ -30,7 +30,12 @@ public class Player extends MovingObject{
     
     /* Delta Time fixing */
     private Chronometer fireRate;
-    
+    /*Determine the period of time in which the player will be spawning */
+    private boolean spawning; 
+    //know when to draw or not to draw the ship
+    private boolean visible;
+    //control the change between visible and not visible
+    private Chronometer spawnTime, flickerTime;
     /* Constructor */
     public Player(
         Vector2D position, 
@@ -38,6 +43,7 @@ public class Player extends MovingObject{
         double maxVelocity, 
         BufferedImage texture,
         GameState gameState
+            
     ) {
         /* Parent attributes */
         super(position, velocity, maxVelocity, texture, gameState);
@@ -46,13 +52,27 @@ public class Player extends MovingObject{
         fireRate = new Chronometer();
         heading= new Vector2D(0, 1);
         acceleration = new Vector2D();
+        spawnTime = new Chronometer();
+        flickerTime = new Chronometer();
     }
     
     /* Methods */
     @Override
     public void update() {
+        //Initialize values when the ship is not spawning
+        if(!spawnTime.isRunning()) {
+			spawning = false;
+			visible = true;
+		}
+        //produce the flickering effect
+	if(spawning) {	
+            if(!flickerTime.isRunning()) {
+		flickerTime.run(Constant.FLICKER_TIME);
+		visible = !visible;
+            }	
+	}
         /* Shooting effect */
-        if(KeyBoard.SHOOT &&  !fireRate.isRunning()){
+        if(KeyBoard.SHOOT &&  !fireRate.isRunning() && !spawning){
             gameState.getMovingObjects().add(0, 
                 new Laser(
                     getCenter().add(heading.scale(width)), 
@@ -122,13 +142,38 @@ public class Player extends MovingObject{
         
         /* Updates the chronometer */
         fireRate.update();
+        spawnTime.update();
+        flickerTime.update();
         
         /* Detects a collition */
         collidesWith();
+       
+        
     }
-
+    
+    /*Cuando se destruya reaparezca pero titilando*/
+    @Override
+    public void Destroy() {
+        //ship starts flashing
+	spawning = true;
+	spawnTime.run(Constant.SPAWNING_TIME);
+        //Reset values position
+	resetValues();
+        //remove a player attempt
+        gameState.subtractLife();
+	}
+    //reset ship position values
+    private void resetValues() {	
+		angle = 0;
+		velocity = new Vector2D();
+		position = new Vector2D(Constant.WIDTH/2 - Asset.player.getWidth()/2, Constant.HEIGHT/2 - Asset.player.getHeight()/2);
+	}
     @Override
     public void draw(Graphics g) {
+        //en el caso de no ser visible no se dibuje
+        if (!visible){
+            return;
+        }
         /* Sets the graphics object */
         Graphics2D g2d= (Graphics2D)g;
         
@@ -159,5 +204,8 @@ public class Player extends MovingObject{
         at.rotate(angle, width / 2, height / 2); 
         g2d.drawImage(texture, at, null );
     }
-    
+    //Para que los demas objetos no disparen
+    public boolean isSpawning() {
+        return spawning;
+    }
 }

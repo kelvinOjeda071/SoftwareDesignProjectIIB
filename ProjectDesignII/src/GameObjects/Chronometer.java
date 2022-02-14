@@ -22,7 +22,7 @@ public class Chronometer {
     /* Constructor */
     public Chronometer(){
         delta = 0;
-        lastTime = 0;
+        lastTime = System.currentTimeMillis();
         running = false;
     }
     
