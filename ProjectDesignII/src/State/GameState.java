@@ -17,6 +17,7 @@ import GameObjects.Size;
 import GameObjects.Ufo;
 import Graphics.Animation;
 import Graphics.Text;
+import Main.MenuState;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -251,7 +252,7 @@ public class GameState extends State{
 
     private void drawLives(Graphics g) {
         if (lives<1){
-            message.add(new Message(new Vector2D(Constant.WIDTH/2, Constant.HEIGHT/2), false, "GAME OVER "+waves, Color.WHITE, true, Asset.fontBig, this));
+           State.changeState(new MenuState());// message.add(new Message(new Vector2D(Constant.WIDTH/2, Constant.HEIGHT/2), false, "GAME OVER "+waves, Color.WHITE, true, Asset.fontBig, this));
             return;
         }
 
@@ -285,6 +286,7 @@ public class GameState extends State{
 
     /* Draws the desired object */
     public void draw(Graphics g) {
+        
         /* Anti aliasing */
         Graphics2D g2d = (Graphics2D) g;
 
@@ -319,7 +321,6 @@ public class GameState extends State{
         }
         drawScore(g);
         drawLives(g);
-        
     }
 
     /* Get */
