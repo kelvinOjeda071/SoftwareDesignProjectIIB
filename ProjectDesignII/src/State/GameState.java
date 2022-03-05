@@ -5,6 +5,7 @@
 package State;
 
 import GameObjects.Asteroid;
+import GameObjects.Chronometer;
 import GameObjects.MovingObject;
 import GameObjects.Player;
 import Graphics.Asset;
@@ -16,18 +17,26 @@ import GameObjects.Message;
 import GameObjects.Size;
 import GameObjects.Ufo;
 import Graphics.Animation;
-import Graphics.Text;
-import Main.MenuState;
+import IO.JSONParser;
+import IO.ScoreData;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author KelvinOjeda
  */
 public class GameState extends State{
+    
+    public static final Vector2D PLAYER_START_POSITION =  new Vector2D(
+    Constant.WIDTH / 2 - Asset.player.getWidth() / 2,
+    Constant.HEIGHT / 2 - Asset.player.getHeight() / 2);
 
     /* Attributes */
     private Player player;
@@ -43,24 +52,22 @@ public class GameState extends State{
 
     //number of waves
     private int waves = 1;
+    private Chronometer gameOverTimer;
+    private boolean gameOver;
+    private Chronometer ufoSpawner;
 
     /* Constructor */
     public GameState() {
-        /* Attributes */
-
-        int wPos = 0;
-        int hPos = 0;
-
-        /* Calculates the vector x and y attributes */
-        wPos = Constant.WIDTH / 2 - Asset.player.getWidth() / 2;
-        hPos = Constant.HEIGHT / 2 - Asset.player.getHeight() / 2;
 
         player = new Player(
-                new Vector2D(wPos, hPos),
+                PLAYER_START_POSITION,
                 new Vector2D(),
                 Constant.PLAYER_MAX_VEL,
-                Asset.player, this
-        );
+                Asset.player, 
+                this);
+        gameOverTimer = new Chronometer();
+        gameOver= false;
+        
 
         /* Adds the player as a moving object */
         movingObjects.add(player);
@@ -70,13 +77,15 @@ public class GameState extends State{
 
         /* Starts the asteroids wave */
         startWave();
+        ufoSpawner = new Chronometer();
+        ufoSpawner.run(Constant.UFO_SPAWN_RATE);
     }
 
     /* Methods */
     public void addScore(int value, Vector2D pos) {
         score += value;
         /*Pos is the position of the object that was destroyed */
-        message.add(new Message(pos, true, "+"+value+" score", Color.WHITE, false, Asset.fontMed, this));
+        message.add(new Message(pos, true, "+"+value+" score", Color.WHITE, false, Asset.fontMed));
     }
 
     /* Increases the number of asteroids if destroyed */
@@ -108,14 +117,12 @@ public class GameState extends State{
         /* Ateroids split iteration */
         int i = 0;
 
-        /* Calculates the angle*/
-        double myAngle = Math.random() * Math.PI * 2;
 
         for (i = 0; i < size.quantity; i++) {
             movingObjects.add(
                     new Asteroid(
                             myAsteroid.getPosition(),
-                            new Vector2D(0, 1).setDirection(myAngle),
+                            new Vector2D(0, 1).setDirection(Math.random() * Math.PI * 2),
                             Constant.ASTEROID_VEL * Math.random() + 1,
                             textures[(int) (Math.random() * textures.length)],
                             this,
@@ -128,11 +135,12 @@ public class GameState extends State{
     /* Deploys the asteroids */
     private void startWave() {
         /*draw the message*/
-         message.add(new Message(new Vector2D(Constant.WIDTH/2, Constant.HEIGHT/2), false, "WAVE "+waves, Color.WHITE, true, Asset.fontBig, this));
+         message.add(new Message(new Vector2D(Constant.WIDTH/2, 
+                 Constant.HEIGHT/2), false, "WAVE "+waves, 
+                 Color.WHITE, true, Asset.fontBig));
         /* Asteroid position */
         double x;
         double y;
-        double myAngle;
 
         /* Counter */
         int i = 0;
@@ -146,14 +154,11 @@ public class GameState extends State{
             BufferedImage texture
                     = Asset.bigs[(int) (Math.random() * Asset.bigs.length)];
 
-            /* Calculates the angle*/
-            myAngle = Math.random() * Math.PI * 2;
-
             /* Adds the asteroid as a moving object */
             movingObjects.add(
                     new Asteroid(
                             new Vector2D(x, y),
-                            new Vector2D(0, 1).setDirection(myAngle),
+                            new Vector2D(0, 1).setDirection(Math.random() * Math.PI * 2),
                             Constant.ASTEROID_VEL * Math.random() + 1,
                             texture,
                             this,
@@ -164,7 +169,7 @@ public class GameState extends State{
 
         /* Increases game difficulty */
         asteroid++;
-        spawnUfo();
+        
     }
 
     /* Plays the explosion animation */
@@ -172,6 +177,7 @@ public class GameState extends State{
 
         explosions.add(
                 new Animation(Asset.explosions, 50, position.subtract(new Vector2D(
+                        //Explosion in the middle of the object
                         Asset.explosions[0].getWidth() / 2,
                         Asset.explosions[0].getHeight() / 2)))
         );
@@ -204,7 +210,8 @@ public class GameState extends State{
                 new Vector2D(),
                 Constant.UFO_MAX_VEL,
                 Asset.ufo,
-                path, this));
+                path, 
+                this));
     }
 
     /* Updates the object status */
@@ -213,20 +220,43 @@ public class GameState extends State{
         int i = 0;
 
         for (i = 0; i < movingObjects.size(); i++) {
-            movingObjects.get(i).update();
+            MovingObject auxMovinObject = movingObjects.get(i);
+            auxMovinObject.update();
+            if(auxMovinObject.isDead()){
+                movingObjects.remove(i);
+                i--;
+            }
         }
 
         /* Updates the explosions animation */
         for (i = 0; i < explosions.size(); i++) {
             Animation myAnimation = explosions.get(i);
             myAnimation.update();
-
+            
             /* Checks if animation is still running */
             if (!myAnimation.isIsRunning()) {
                 /* Deletes the animation */
                 explosions.remove(i);
             }
         }
+        if(gameOver && !gameOverTimer.isRunning()){
+            
+            try {
+                ArrayList <ScoreData> dataList = JSONParser.readField();
+                dataList.add( new ScoreData(score));
+                JSONParser.writeFile(dataList);
+            } catch (IOException ex) {
+                Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            State.changeState(new MenuState());
+        }
+        if(!ufoSpawner.isRunning()){
+            ufoSpawner.run(Constant.UFO_SPAWN_RATE);
+            spawnUfo();
+        }
+        gameOverTimer.update();
+        ufoSpawner.update();
 
         /* Decides if a new wave is necessary */
         for (i = 0; i < movingObjects.size(); i++) {
@@ -251,8 +281,8 @@ public class GameState extends State{
     }
 
     private void drawLives(Graphics g) {
-        if (lives<1){
-           State.changeState(new MenuState());// message.add(new Message(new Vector2D(Constant.WIDTH/2, Constant.HEIGHT/2), false, "GAME OVER "+waves, Color.WHITE, true, Asset.fontBig, this));
+        if (lives < 1){
+           
             return;
         }
 
@@ -301,6 +331,8 @@ public class GameState extends State{
         //Draw the message
         for(i = 0; i < message.size(); i++){
             message.get(i).draw(g2d);
+            if(message.get(i).isDead())
+                message.remove(i);
         }
         
         for (i = 0; i < movingObjects.size(); i++) {
@@ -308,7 +340,7 @@ public class GameState extends State{
         }
 
         /* Draws the animation */
- /* Updates the explosions animation */
+        /* Updates the explosions animation */
         for (i = 0; i < explosions.size(); i++) {
             Animation myAnimation = explosions.get(i);
             g2d.drawImage(
@@ -339,8 +371,22 @@ public class GameState extends State{
     }
 
     //subtract one life from the ship
-    public void subtractLife() {
+    public boolean subtractLife() {
         lives--;
+        return lives > 0;
+    }
+    public void gameOver() {
+        Message gameOverMsg = new Message(
+                PLAYER_START_POSITION,
+                true,
+                "GAME OVER",
+                Color.WHITE,
+                true,
+                Asset.fontBig);
+
+        this.message.add(gameOverMsg);
+        gameOverTimer.run(Constant.GAME_OVER_TIME);
+        gameOver = true;
     }
 
     public ArrayList<Message> getMessages() {

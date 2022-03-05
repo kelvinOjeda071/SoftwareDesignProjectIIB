@@ -68,6 +68,7 @@ public class Ufo extends MovingObject {
     public void update() {
         Vector2D pathFollowing;
         if(following)
+            // If the UFO continues following the path
             pathFollowing = pathFollowing();
         else
             pathFollowing = new Vector2D();
@@ -100,6 +101,7 @@ public class Ufo extends MovingObject {
         angle +=0.05;
         /*Because the UFO also detect collitions with other elements in the 
         widows*/
+        
         collidesWith();
         fireRate.update();
         

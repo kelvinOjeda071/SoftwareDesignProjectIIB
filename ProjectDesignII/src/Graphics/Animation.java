@@ -44,7 +44,7 @@ public class Animation {
         
         /* Changes the current frame */
         if(time > velocity){
-            /* Sets the attributes values */
+            /* Sets the att ributes values */
             time = 0;
             index ++;
             

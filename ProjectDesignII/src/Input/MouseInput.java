@@ -12,34 +12,38 @@ import javax.swing.event.MouseInputListener;
  *
  * @author HOME
  */
-public class MouseInput extends MouseAdapter{
-	/*mouse position*/
-	public static int X, Y;
-	public static boolean MLB;
-	/*pressed*/
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1) {
-			MLB = true;
-		}
-	}
-        /*Released*/
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1) {
-			MLB = false;
-		}
-	}
+public class MouseInput extends MouseAdapter {
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		X = e.getX();
-		Y = e.getY();
-	}
+    /*mouse position*/
+    public static int X, Y;
+    /*Mouse left button*/
+    public static boolean MLB;
 
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		X = e.getX();
-		Y = e.getY();
-	}
+    /*pressed*/
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            MLB = true;
+        }
+    }
+
+    /*Released*/
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            MLB = false;
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        X = e.getX();
+        Y = e.getY();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        X = e.getX();
+        Y = e.getY();
+    }
 }

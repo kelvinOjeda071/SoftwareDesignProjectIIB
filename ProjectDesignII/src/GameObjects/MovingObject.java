@@ -33,6 +33,7 @@ public abstract class MovingObject extends GameObject {
     
     /* Game State object */
     protected GameState gameState;
+    protected boolean dead;
     
     /* Constructor */
     public MovingObject(Vector2D position, Vector2D velocity, 
@@ -46,6 +47,7 @@ public abstract class MovingObject extends GameObject {
         width= texture.getWidth();
         height= texture.getHeight();
         angle = 0;
+        dead = false;
     }
     
     /* Methods */
@@ -63,7 +65,7 @@ public abstract class MovingObject extends GameObject {
     protected void collidesWith(){
         /* Attributes */
         ArrayList<MovingObject> movingObjects = gameState.getMovingObjects();
-        double distance;
+        
         
         /* Index pointer */
         int i = 0;
@@ -77,7 +79,7 @@ public abstract class MovingObject extends GameObject {
             }
             
             /* Calculates the distance between the object */
-            distance = 
+            double distance = 
                 myGameObject.
                 getCenter().
                 subtract(getCenter()).
@@ -87,45 +89,40 @@ public abstract class MovingObject extends GameObject {
             if(
                 distance < myGameObject.width / 2 +  width / 2
                     && movingObjects.contains(this)
+                    && !myGameObject.dead
+                    && !dead
+               
             ) {
-                objectCollition(myGameObject, this);
+                objectCollition(myGameObject , this);
             }
         }
     }
     
     /* Destroys both of the asteroids */
     private void objectCollition(MovingObject firstO, MovingObject secondO){
+//        p = player
         //Check if the ship is blinking 
-        if(firstO instanceof Player && ((Player)firstO).isSpawning()) {
-			return;
-		}
-		if(secondO instanceof Player && ((Player)secondO).isSpawning()) {
-			return;
-		}
+        if (firstO instanceof Player && ((Player) firstO).isSpawning()) {
+            return;
+        }
+        if (secondO instanceof Player && ((Player) secondO).isSpawning()) {
+            return;
+        }
                 
         if(!(firstO instanceof Asteroid && secondO instanceof Asteroid)){
             /* Plays the explosion animation */
             gameState.playExplosion(getCenter());
-            
             firstO.destroy();
             secondO.destroy();
         }
     }
     /* Removes the game object if this collides */
     protected void destroy(){
-        gameState.getMovingObjects().remove(this);
+        dead = true;
     }
     
-    /* Update method */
-    @Override
-    public void update() {
-        
+    public boolean isDead() {
+        return dead;
     }
-    
-    /* Draw method */
-    @Override
-    public void draw(Graphics g) {
-        
-    }
-    
+
 }
